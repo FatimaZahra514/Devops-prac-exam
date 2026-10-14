@@ -1,0 +1,26 @@
+services:
+  app:
+    build: .
+    environment:
+      NAME: Fatima
+    networks:
+      - practice-net
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:alpine
+    command: ["redis-server", "--appendonly", "yes"]
+
+    volumes:
+      - redis-data:/data
+    networks:
+      - practice-net
+
+networks:
+  practice-net:
+
+volumes:
+  redis-data:
+  
+   
