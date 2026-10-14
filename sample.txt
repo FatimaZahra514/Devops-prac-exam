@@ -1,0 +1,5 @@
+error api
+info web
+error database
+warning api
+error web

@@ -1,26 +1,27 @@
 services:
-  app:
+  notes:
     build: .
+    ports:
+      - "8080:5000"
     environment:
-      NAME: Fatima
+      APP_NAME: Fatima's Notes
+      DATABASE: /data/notes.db
+    volumes:
+      - notes-data:/data
     networks:
-      - practice-net
-    depends_on:
-      - redis
+      - notes-net
 
-  redis:
+  helper:
     image: redis:alpine
     command: ["redis-server", "--appendonly", "yes"]
-
     volumes:
       - redis-data:/data
     networks:
-      - practice-net
+      - notes-net
 
 networks:
-  practice-net:
+  notes-net:
 
 volumes:
+  notes-data:
   redis-data:
-  
-   
