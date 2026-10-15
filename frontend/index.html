@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Notes Practice</title>
+</head>
+<body>
+  <h1>My Notes</h1>
+
+  <form id="note-form">
+    <input id="note-text" placeholder="Write a note" required>
+    <button>Add note</button>
+  </form>
+
+  <ul id="notes"></ul>
+  <p id="message"></p>
+
+  <script>
+  const api = "http://localhost:5000/api/notes";
+    const list = document.querySelector("#notes");
+    const message = document.querySelector("#message");
+
+    async function loadNotes() {
+      try {
+        const response = await fetch(api);
+        const notes = await response.json();
+        list.replaceChildren();
+
+        for (const note of notes) {
+          const item = document.createElement("li");
+          item.textContent = note;
+          list.appendChild(item);
+        }
+        message.textContent = "";
+      } catch {
+        message.textContent = "Could not connect to the backend.";
+      }
+    }
+
+    document.querySelector("#note-form").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const input = document.querySelector("#note-text");
+
+      await fetch(api, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: input.value })
+      });
+
+      input.value = "";
+      loadNotes();
+    });
+
+    loadNotes();
+  </script>
+</body>
+</html>
